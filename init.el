@@ -74,35 +74,67 @@
 
 
 
-
 ;; -------------------
 ;; OWN SETINGS
 ;; -------------------
 (setq make-backup-files nil) ; stop creating backup~ files
 (setq auto-save-default nil) ; stop creating #autosave# files
-;; (setq linum-format " %d ")
+
 
 (use-package zenburn-theme
   :config
   (load-theme 'zenburn t))
+
 
 (cua-selection-mode 1) ; Enable CUA selection mode without the C-z/C-x/C-c/C-v bindings.
 (toggle-scroll-bar -1) ; Disable vertical scroolbar
 (menu-bar-mode -1) ; Disable menu bar
 (tool-bar-mode -1)
 (show-paren-mode 1)
+(ivy-mode 1)
+(elpy-enable)
+
+
+(global-set-key (kbd "M-c") `minibuffer-keyboard-quit)
+
+
+(defhydra hydra-elpy-region-move (global-map "M-<tab>")
+  ("M-i" elpy-nav-move-line-or-region-up)
+  ("M-k" elpy-nav-move-line-or-region-down)
+  ("M-j" elpy-nav-indent-shift-left)
+  ("M-l" elpy-nav-indent-shift-right))
 
 
 (global-set-key (kbd "M-q") `treemacs)
-
-
 (add-hook 'treemacs-mode-hook (lambda () (linum-mode -1)))
 
 
+;; -------------------
 ;; linum snippet
+;; -------------------
+;; (setq linum-format " %d ")
 (require 'linum-highlight-current-line-number)
 (setq linum-format 'linum-highlight-current-line-number)
 (global-linum-mode)
+
+
+
+;; -------------------
+;; ivy switch buffer snippet
+;; -------------------
+(defun my-ivy-switch-buffer (regex-list)
+  (interactive)
+  (let ((ivy-ignore-buffers regex-list))
+    (ivy-switch-buffer)))
+
+
+(defun my-ivy-switch-buffer-ignore ()
+  (interactive)
+  (my-ivy-switch-buffer `("\\` " "^*")))
+
+
+(global-set-key
+     (kbd "M-b") `my-ivy-switch-buffer-ignore)
 
 
 
@@ -111,9 +143,41 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(company-quickhelp-color-background "#4F4F4F")
+ '(company-quickhelp-color-foreground "#DCDCCC")
+ '(custom-safe-themes
+   (quote
+    ("cdb4ffdecc682978da78700a461cdc77456c3a6df1c1803ae2dd55c59fa703e3" "e61752b5a3af12be08e99d076aedadd76052137560b7e684a8be2f8d2958edc3" default)))
+ '(fci-rule-color "#383838")
+ '(nrepl-message-colors
+   (quote
+    ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (treemacs rainbow-delimiters zenburn-theme moe-theme wakib-keys diminish use-package))))
+    (neotree elpy js2-mode swiper ivy treemacs rainbow-delimiters zenburn-theme moe-theme wakib-keys diminish use-package)))
+ '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
+ '(vc-annotate-background "#2B2B2B")
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#BC8383")
+     (40 . "#CC9393")
+     (60 . "#DFAF8F")
+     (80 . "#D0BF8F")
+     (100 . "#E0CF9F")
+     (120 . "#F0DFAF")
+     (140 . "#5F7F5F")
+     (160 . "#7F9F7F")
+     (180 . "#8FB28F")
+     (200 . "#9FC59F")
+     (220 . "#AFD8AF")
+     (240 . "#BFEBBF")
+     (260 . "#93E0E3")
+     (280 . "#6CA0A3")
+     (300 . "#7CB8BB")
+     (320 . "#8CD0D3")
+     (340 . "#94BFF3")
+     (360 . "#DC8CC3"))))
+ '(vc-annotate-very-old-color "#DC8CC3"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
